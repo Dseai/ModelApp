@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyTestApp</string>
+    <string-array name="goods_types">
+        <item>全部</item>
+        <item>生活用品</item>
+        <item>数码科技</item>
+        <item>服饰箱包</item>
+        <item>图书音像</item>
+        <item>其它</item>
+    </string-array>
+</resources>
