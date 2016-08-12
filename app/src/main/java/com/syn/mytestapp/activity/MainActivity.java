@@ -2,23 +2,22 @@ package com.syn.mytestapp.activity;
 
 
 import android.content.Context;
-import android.graphics.Color;
-
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
 import android.os.Bundle;
-
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toolbar;
-
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 import com.syn.mytestapp.R;
-import com.syn.mytestapp.adapter.FragmentAdapter;
+import com.syn.mytestapp.adapter.TabFragmentAdapter;
 import com.syn.mytestapp.fragment.FragmentAll;
 import com.syn.mytestapp.fragment.FragmentBooks;
 import com.syn.mytestapp.fragment.FragmentClothes;
@@ -34,81 +33,109 @@ import java.util.List;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends  BaseActivity implements Toolbar.OnMenuItemClickListener {
     private long lastPressTime = 0;
     public static Context AppContext;
-    public static final String POST_ID = "POST_ID";
-    public static final String POST_COVER = "POST_COVER";
-
     protected Toolbar mToolbar;
-    private Fragment mTradeFragment;
-
-    private FragmentManager mContextFragmentManager;
-
-    private FragmentManager mMainFM;
-    private FragmentTransaction mMainFT;
 
     private ViewPager pager;
+    private TabLayout tabLayout;
 
-    private List<String> titleList;
-    private PagerTabStrip tab;
     private List<Fragment> fragList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        AppContext = getApplicationContext();
-      //  mToolbar=(Toolbar)findViewById(R.id.trade_toolbar);
+        setContentView(getContentView());
+        AppContext=getApplicationContext();
+        initView();
+    }
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initView() {
+        initToolbar();
+        initTabLayout();
+
+    }
+    private void initTabLayout() {
+        pager = findView(R.id.viewPager);
+        tabLayout = findView(R.id.tabs);
 
         /**
-         * 设置标题
+         * 为tab添加标题
          */
-        titleList = new ArrayList();
-        titleList.add("全部");
-        titleList.add("生活用品");
-        titleList.add("数码科技");
-        titleList.add("服饰箱包");
-        titleList.add("图书音像");
-        titleList.add("其它");
-        tab = (PagerTabStrip)this.findViewById(R.id.tab);
+        List<String> tabList = new ArrayList<>();
+        tabList.add("全部");
+        tabList.add("生活用品");
+        tabList.add("数码科技");
+        tabList.add("服饰箱包");
+        tabList.add("图书音像");
+        tabList.add("其它");
+
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置tab模式，当前为系统默认模式
+        //此处代码设置无效，不知道为啥？？？xml属性是可以的
+//        tabLayout.setTabTextColors(android.R.color.white, android.R.color.holo_red_dark);//设置TabLayout两种状态
+        tabLayout.addTab(tabLayout.newTab().setText(tabList.get(0)));//添加tab选项卡
+        tabLayout.addTab(tabLayout.newTab().setText(tabList.get(1)));
+        tabLayout.addTab(tabLayout.newTab().setText(tabList.get(2)));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab4"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab5"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab6"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab7"));
+
         /**
-         * 为pager title设置一些属性
+         * 初始化fragment
          */
-       this.tab.setBackgroundColor(Color.WHITE);
-        this.tab.setTabIndicatorColor(Color.GRAY);
-        this.tab.setDrawFullUnderline(false);//不显示下面的线
-        this.tab.setTextColor(Color.BLACK);
-        tab.setClickable(true);
-        this.pager = (ViewPager)this.findViewById(R.id.pager);
-        /**
-         * 通过fragment创建数据源
-         */
-       this.fragList = new ArrayList();
+        this.fragList = new ArrayList();
         this.fragList.add(new FragmentAll());
         this.fragList.add(new FragmentSupplies());
         this.fragList.add(new FragmentDigtal());
         this.fragList.add(new FragmentClothes());
         this.fragList.add(new FragmentBooks());
         this.fragList.add(new FragmentOthers());
-
-        //创建适配器
-        FragmentAdapter adapter=new FragmentAdapter(getSupportFragmentManager(),fragList,titleList);
-        this.pager.setAdapter(adapter);
+        TabFragmentAdapter fragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), fragList, tabList);
+        pager.setAdapter(fragmentAdapter);//给ViewPager设置适配器
+        tabLayout.setupWithViewPager(pager);//将TabLayout和ViewPager关联起来。
+        tabLayout.setTabsFromPagerAdapter(fragmentAdapter);//给Tabs设置适配器
 
     }
-
-   /* private void setUpToolbar() {
-        if (mToolbar != null) {
-            mToolbar.setTitle("所有商品");
+    private void initToolbar() {
+        mToolbar = findView(R.id.toolbar);
             setSupportActionBar(mToolbar);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
-//设置toolbar上的菜单选项
-            // setUpToolbarMenu();
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            mToolbar.setTitle("高仿淘二手");
+            mToolbar.setSubtitle("SYN");
+            mToolbar.setLogo(R.mipmap.ic_launcher);
+        mToolbar.setOnMenuItemClickListener(this);
+
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_goods:
+                startActivity(new Intent(MainActivity.this, PubishGoodsActivity.class));
+                break;
+            case R.id.action_share:
+                Toast.makeText(this, "用户信息查看以及编辑按钮", Toast.LENGTH_SHORT).show();
+                break;
         }
-    }*/
+
+        return true;
+    }
+
+
+
     @Override
     public void onBackPressed() {
        if(canExit()){
@@ -120,12 +147,11 @@ public class MainActivity extends AppCompatActivity {
         if(Settings.isExitConfirm){
             if(System.currentTimeMillis() - lastPressTime > CONSTANT.exitConfirmTime){
                 lastPressTime = System.currentTimeMillis();
-                Snackbar.make(getCurrentFocus(), "再按返回键一次推出",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getCurrentFocus(), "再按返回键一次退出",Snackbar.LENGTH_SHORT).show();
                 return false;
             }
         }
         return true;
     }
-
 
 }

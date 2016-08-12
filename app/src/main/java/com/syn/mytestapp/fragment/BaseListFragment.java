@@ -35,7 +35,7 @@ public class BaseListFragment extends BaseFragment implements BaseListView {
     protected ProgressBar progressBar;
     protected ImageButton networkBtn;
     protected BaseListAdapter adapter;
-    protected CardView spinnerCard;
+   // protected CardView spinnerCard;
     protected SwipeRefreshLayout swipeRefreshLayout;
     protected Button toLoginBtn;
     protected TextView tip;
@@ -47,7 +47,7 @@ public class BaseListFragment extends BaseFragment implements BaseListView {
         layoutManager = new LinearLayoutManager(MainActivity.AppContext);
         progressBar = (ProgressBar) parentView.findViewById(R.id.progressBar);
         networkBtn = (ImageButton) parentView.findViewById(R.id.networkBtn);
-
+        //spinnerCard = (CardView) parentView.findViewById(R.id.spinner_card_view);
         recyclerView = (RecyclerView) parentView.findViewById(R.id.recyclerView);
 
         tip = (TextView) parentView.findViewById(R.id.tip);
@@ -66,7 +66,7 @@ public class BaseListFragment extends BaseFragment implements BaseListView {
         bindAdapter();
         trySetupRefreshLayout();
         addHeader();
-        initView();
+//        initView();
     }
 
     @Override

@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <include layout="@layout/widget_toolbar"></include>
-<FrameLayout
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways" />
+    </android.support.design.widget.AppBarLayout>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,9 +31,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
+            android:orientation="vertical"
+            android:paddingTop="50dp">
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/titlelayout"
                 android:layout_width="match_parent"
@@ -28,7 +40,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp">
-
                 <EditText
                     android:id="@+id/title"
                     android:layout_width="match_parent"
@@ -44,9 +55,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                app:ms_arrow_tint="?attr/textColor"
-                app:ms_background_color="?attr/cardViewColor"
-                app:ms_text_color="?attr/textColor" />
+                app:ms_arrow_tint="#897373"
+                app:ms_background_color="#ffffff"
+                app:ms_text_color="#000000" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -54,7 +65,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:text="购买时间"
+                android:text="购买时间（如：2016年8月11日）"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -180,7 +191,7 @@
                             android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Amount" />
+                            android:hint="数量" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -189,7 +200,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="2"
-                        android:text="PS"
+                        android:text="件"
                         android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -255,7 +266,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -265,26 +277,27 @@
                     android:layout_marginTop="10dp"
                     android:text="添加照片"
                     android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/addPic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#b8b09b"
+                        android:text="添加图片" />
+                </LinearLayout>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/addPic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/cardViewColor"
-                    android:text="编辑" />
+
+
 
             </LinearLayout>
 
-            <!--<ImageView-->
-            <!---->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="100dp"-->
-            <!--android:padding="20dp"-->
-            <!--android:src="@mipmap/ic_add_circle"/>-->
-            <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/addPhotoRV"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="120dp"/>-->
             <cn.finalteam.galleryfinal.widget.HorizontalListView
                 android:id="@+id/lv_photo"
                 android:layout_width="match_parent"
@@ -339,7 +352,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorAccent"
-                android:textColor="?attr/cardViewColor"
+                android:textColor="#000000"
                 android:id="@+id/doneBackButton"
                 android:layout_marginTop="20dp"
                 android:text="返回商品列表"/>
@@ -347,4 +360,5 @@
     </LinearLayout>
 </FrameLayout>
 
-</LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>

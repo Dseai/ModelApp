@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyTestApp</string>
+    <string name="app_name">syn</string>
     <string-array name="goods_types">
         <item>全部</item>
         <item>生活用品</item>

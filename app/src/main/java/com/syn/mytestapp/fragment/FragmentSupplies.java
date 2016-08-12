@@ -104,12 +104,12 @@ public class FragmentSupplies extends BaseListFragment {
             LoadGoodsListUtil.getTagGoodsList(MainActivity.AppContext,2);
             displayLoading();
         }
-        toLoginBtn.setOnClickListener(new View.OnClickListener() {
+       /**toLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new EventModel<String>(EVENT.JUMP_TO_JXNUGO_LOGIN));
             }
-        });
+        });*/
     }
 
     private void addItems(ArrayList<OneSimplePost> list) {

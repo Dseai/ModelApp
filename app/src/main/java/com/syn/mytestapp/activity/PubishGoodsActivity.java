@@ -1,14 +1,17 @@
 package com.syn.mytestapp.activity;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
@@ -55,7 +59,7 @@ import cn.finalteam.galleryfinal.widget.HorizontalListView;
 /**
  * Created by 孙亚楠 on 2016/8/5.
  */
-public class PubishGoodsActivity extends AppCompatActivity implements View.OnClickListener {
+public class PubishGoodsActivity extends BaseActivity implements View.OnClickListener {
     public static final String TAG = "PublishGoodsActivity";
     private static final String title = "上传物品";
     private final int REQUEST_CODE_GALLERY = 1001;
@@ -80,31 +84,25 @@ public class PubishGoodsActivity extends AppCompatActivity implements View.OnCli
     private LinearLayout uploadingLayout,doneLayout;
     private ScrollView infoScrollview;
     private MenuItem sendMenuItem;
+    protected Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        setContentView(getContentView());
         TCAgent.onPageStart(MainActivity.AppContext, TAG);
-        setContentView(R.layout.activity_jxnugo_new_goods);
         initView();
-        bindAdapter();
-        addTagSpinner();//添加spinner下拉列表框
-
     }
 
-    private void addTagSpinner() {
-        GoodTagSpinnerWrapper spinnerWrapper = new GoodTagSpinnerWrapper();
-        spinnerWrapper.setOnTagChangedListener(new OnGoodTagChangedListener() {
-            @Override
-            public void onTagChanged(int tag) {
-                goodTag = tag;
-            }
-        });
-        spinnerWrapper.build((MaterialSpinner) findViewById(R.id.spinner));
+    @Override
+    protected int getContentView() {
+       return R.layout.activity_jxnugo_new_goods;
     }
 
+    @Override
+    protected void initView() {
 
-    private void initView() {
         picListView = (HorizontalListView) findViewById(R.id.lv_photo);
         addPicButton = (AppCompatButton) findViewById(R.id.addPic);
         goodNameET=(EditText)findViewById(R.id.title);
@@ -121,10 +119,37 @@ public class PubishGoodsActivity extends AppCompatActivity implements View.OnCli
         uploadingLayout=(LinearLayout)findViewById(R.id.uploading);
         doneLayout=(LinearLayout)findViewById(R.id.doneUploading);
         doneBackButton=(AppCompatButton)findViewById(R.id.doneBackButton);
+
         addPicButton.setOnClickListener(this);
         doneBackButton.setOnClickListener(this);
+
+        bindAdapter();
+        addTagSpinner();//添加spinner下拉列表框
+        initToolbar();
+
     }
 
+    private void addTagSpinner() {
+        GoodTagSpinnerWrapper spinnerWrapper = new GoodTagSpinnerWrapper();
+        spinnerWrapper.setOnTagChangedListener(new OnGoodTagChangedListener() {
+            @Override
+            public void onTagChanged(int tag) {
+                goodTag = tag;
+            }
+        });
+        spinnerWrapper.build((MaterialSpinner) findViewById(R.id.spinner));
+        initToolbar();
+    }
+
+
+    private void initToolbar() {
+        mToolbar = findView(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mToolbar.setTitle("发布商品");
+        //mToolbar.setSubtitle("SYN");
+        mToolbar.setLogo(R.mipmap.ic_launcher);
+    }
     private void bindAdapter() {
         mPhotoList = new ArrayList<>();
         adapter = new ChoosePicAdapter(PubishGoodsActivity.this, mPhotoList);
@@ -266,7 +291,7 @@ public class PubishGoodsActivity extends AppCompatActivity implements View.OnCli
         switch (item.getItemId()) {
             case R.id.menu_new_goods_done:
                 if(!completeInput()){
-                    Snackbar.make(getCurrentFocus(), "请上传",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getCurrentFocus(), "请将必要的信息填写完整",Snackbar.LENGTH_SHORT).show();
                 }
                 else{
                     sendMenuItem.setVisible(false);
@@ -362,6 +387,7 @@ public class PubishGoodsActivity extends AppCompatActivity implements View.OnCli
         TCAgent.onPageEnd(MainActivity.AppContext, TAG);
         super.onDestroy();
     }
+
 
 }
 
